@@ -1,14 +1,23 @@
 const debugMODE = false;
 
-var REG = {
-    AX: 0,
-    BX: 0,
-    CX: 0,
-    DX: 0,
-    IP: 0,
-    IR: true,
-    CF: 0
-}
+var REG = Object.create(null);
+REG.AX=0;
+REG.BX=0;
+REG.CX=0;
+REG.DX=0;
+REG.IP=0;
+REG.IR=true;
+REG.CF=0;
+
+// var REG = {
+//     AX: 0,
+//     BX: 0,
+//     CX: 0,
+//     DX: 0,
+//     IP: 0,
+//     IR: true,
+//     CF: 0
+// }
 
 var STACK = []
 
