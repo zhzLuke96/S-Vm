@@ -2,6 +2,8 @@
 
 <h5 align="center"><small>Powered by: Game Scripting Mastery (USA)Alex.Varanese </small></h5>
 
+> 强调一下，这本书非常不推荐读，即使是原著
+
 # README
 面向高级语言的软`虚拟机`，准备用JS和PY都搞搞看
 
@@ -48,4 +50,40 @@ HTL`.split("\n")
 > 有意思吧
 
 # LISP
-> come soon
+### b
+> 题记：<br>
+> 基本定了栈+语义指令集的VM和
+
+beta 随便写点能写的，差不多了解了整个编译管道就可以开搞了
+
+interpreter.js
+
+> 简单解释器，测试call/cc还有动态scoped<br>
+> _TEST_函数算是教程，就是基本的lisp语法<br>
+
+```javascript
+let AST = Scheme.parse(program)
+let res = Scheme.eval(AST)
+```
+```Scheme
+(def r 10)
+(def PI 3.141592654)
+(* PI (* r r))
+(if (and (>= 3 2) (<= 3 5)) (* 3 3) (* 3 7))
+```
+output
+```
+// eval TEST (def r 10)
+ [_DEFINED_]
+// eval TEST (def PI 3.141592654)
+ [_DEFINED_]
+// eval TEST (* PI (* r r))
+ 314.1592654
+// eval TEST (if (and (>= 3 2) (<= 3 5)) (* 3 3) (* 3 7))
+ 9
+```
+
+
+p
+
+> python 相关的（这种后台的东西还是python好使，node那些个库真滴难用）
