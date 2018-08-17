@@ -78,7 +78,8 @@ Scheme.atom = t => isNaN(t % 1) ? t : (t % 1 == 0 ? parseInt(t) : parseFloat(t))
 
 Scheme.base_env = function(options){
     let env = Object.create(null);
-    Object.assign(env,deepClone(Math),options||null);
+    // Object.assign(env,deepClone(Math));
+    Object.assign(env,options||null);
     return env;
 }
 Scheme.standard_env = function(){
@@ -94,12 +95,12 @@ Scheme.standard_env = function(){
 
         "len":o2j("length"),"car":a=>a[0],"cdr":a=>a.splice(1),
         "cons":(a,b)=>[a,b],
-        "list":function(){return Array.prototype.slice.call(arguments)},
+        "list":(...args)=>args,
         "list?":a=>typeAT(a)=="[object Array]","map":(items,fn)=>items.map(fn),
         "empty?":a=>a.length==0,
 
-        "max":function(){return Math.max.apply(Math,Array.prototype.slice.call(arguments))},
-        "min":function(){return Math.min.apply(Math,Array.prototype.slice.call(arguments))},
+        "max":(...args)=>Math.max.apply(Math,args),
+        "min":(...args)=>Math.min.apply(Math,args),
 
         "number?":a=>isNum(a),"procedure?":a=>isCallable(a),"symbol?":a=>isSymbol(a)
     }// built_env end
@@ -149,6 +150,9 @@ const Tst = (fn, input, name) => {
         return Scheme.eval(AST)
     }
 
+    Tst(glo_e, "(list? (list 1 2 3))", "eval TEST");
+    Tst(glo_e, "(max 12 10 43 55 11 92 111)", "eval TEST");
+    Tst(glo_e, "(min 12 10 43 55 11 92 111)", "eval TEST");
     Tst(glo_e, "(def r 10)", "eval TEST");
     Tst(glo_e, "(def PI 3.141592654)", "eval TEST");
     Tst(glo_e, "(* PI (* r r))", "eval TEST");
