@@ -1,9 +1,17 @@
-from lamb_types import LCCall, LCFunction, LCVariable, reduce_machine
+from lamb_types import LCCall, LCFunction, LCVariable
 import regex as re
 
 __version__ = '0.0.1'
 __author__ = "zhzLuke96"
-__date__ = "18/08/22"
+__date__ = "Aug 22 16:13:29 2018"
+
+
+class LambdaSyntaxError(BaseException):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 
 def trim(s):
@@ -14,14 +22,6 @@ def trim(s):
     elif s[-1] in " \n\t":
         return (trim(s[:-1]))
     return s
-
-
-class LambdaSyntaxError(BaseException):
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
 
 
 def tokenize(string):
@@ -69,6 +69,9 @@ def eval_lamb(s_exp):
         elif "." in ast:
             ast = LCFunction(ast[0], sign(ast[2]))
         else:
+            if len(ast) is not 2:
+                raise LambdaSyntaxError(
+                    f"Uncaught SyntaxError: Unexpected token {ast}")
             ast = LCCall(sign(ast[0]), sign(ast[1]))
         return ast
     ast = parse_tokens(tokenize(s_exp))[0]
@@ -83,6 +86,9 @@ if __name__ == '__main__':
     zero = eval_lamb("(f.(x.x))")
     succ = eval_lamb("(n.(f.(x.(f((n f) x)))))")
 
+    # ((f.(x.x)) (n.(f.(x.(f((n f) x))))))
+    # ((n.(f.(x.(f((n f) x))))) (f.(x.x)))
     calc = LCCall(succ, zero)
     print(succ, zero, calc)
+    from reduce_machine import reduce_machine
     reduce_machine(calc)

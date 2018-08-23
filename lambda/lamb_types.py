@@ -6,9 +6,15 @@ __date__ = "18/08/22"
 class LCVariable:
     def __init__(self, name):
         self.name = name
+        self.isfree = True
 
     def __str__(self):
         return str(self.name)
+
+    def bind(self, name, replacement):
+        if self.name is name:
+            self.isfree = False
+            self.name = replacement
 
     def replace(self, name, replacement):
         if self.name is name:
@@ -31,6 +37,11 @@ class LCFunction:
     def __call__(self, argument):
         return self.body.replace(self.para, argument)
 
+    def bind(self, name, replacement):
+        if self.para is name:
+            self.para = replacement
+        self.body.bind(name, replacement)
+
     def replace(self, name, replacement):
         if self.para is name:
             return self
@@ -38,7 +49,12 @@ class LCFunction:
             return LCFunction(self.para, self.body.replace(name, replacement))
 
     def reducible(self):
-        return False
+        return self.body.reducible()
+
+    def reduce(self):
+        if self.body.reducible():
+            return LCFunction(self.para, self.body.reduce())
+        return self
 
 
 class LCCall:
@@ -50,6 +66,10 @@ class LCCall:
 
     def __str__(self):
         return f"({self.left} {self.right})"
+
+    def bind(self, name, replacement):
+        self.left.bind(name, replacement)
+        self.right.bind(name, replacement)
 
     def replace(self, name, replacement):
         return LCCall(self.left.replace(name, replacement),
@@ -67,13 +87,6 @@ class LCCall:
             return self.left(self.right)
 
 
-def reduce_machine(expression):
-    while expression.reducible():
-        print("reduce>>", expression)
-        expression = expression.reduce()
-    print("over:>>", expression, type(expression))
-
-
 if __name__ == '__main__':
     # call
     function1 = LCFunction("x", LCFunction(
@@ -85,11 +98,15 @@ if __name__ == '__main__':
 
     succ = LCFunction("n", LCFunction("p", LCFunction("x", LCCall(LCVariable(
         "p"), LCCall(LCCall(LCVariable("n"), LCVariable("p")), LCVariable("x"))))))
+    # (n.(p.(x.(p ((n p) x)))))
 
     one = LCFunction("p", LCFunction(
         "x", LCCall(LCVariable("p"), LCVariable("x"))))
+    # (p.(x.(p x)))
     add = LCFunction("m", LCFunction("n", LCCall(
         LCCall(LCVariable("n"), succ), LCVariable("m"))))
+    # (m.(n.((n succ) m)))
+    # (m.(n.((n (n.(p.(x.(p ((n p) x))))) m))))
     # one add one
     expression = LCCall(LCCall(add, one), one)
     while expression.reducible():
@@ -100,3 +117,14 @@ if __name__ == '__main__':
 
     expression = LCCall("x", "i")
     print(expression, type(expression.left))
+
+    # bind
+    expression = LCFunction("n", LCFunction("p", LCFunction("x", LCCall(LCVariable(
+        "p"), LCCall(LCCall(LCVariable("n"), LCVariable("p")), LCVariable("x"))))))
+    expression.bind("n", "n1")
+    print(expression)
+    expression.bind("n1", "n")
+    print(expression)
+
+    expression = LCFunction("m", LCCall(expression, expression))
+    print(expression)
