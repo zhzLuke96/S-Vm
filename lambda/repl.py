@@ -19,22 +19,27 @@ def renameLog(logs):
             printDarkPink(f"$ >> unbound variable: {k} rename as {v}\n")
 
 
+def read_oneLine(prompt="  >> "):
+    try:
+        exp = input(prompt)
+        # if exp[0] is ":":
+        #     exec(exp[1:])
+        #     return
+        r = eval_lamb(exp)
+        # print("i >>", r)
+        rn, _ = preCalc(r)
+        if len(_) is not 0:
+            renameLog(_)
+        reduce_machine(rn)
+    except (KeyboardInterrupt, LambdaSyntaxError) as e:
+        print(e)
+        if isinstance(e, KeyboardInterrupt):
+            exit()
+    finally:
+        pass
+
+
 def repl():
-    def read_oneLine(prompt="  >> "):
-        try:
-            exp = input(prompt)
-            r = eval_lamb(exp)
-            rn, _ = preCalc(r)
-            if len(_) is not 0:
-                renameLog(_)
-            print("i >>", rn)
-            reduce_machine(rn)
-        except (KeyboardInterrupt, LambdaSyntaxError) as e:
-            print(e)
-            if isinstance(e, KeyboardInterrupt):
-                exit()
-        finally:
-            pass
     while True:
         read_oneLine()
 
@@ -52,7 +57,8 @@ def repl():
 # (f.(x.(f (x x))))
 
 # Y
-# (y.(x.(y(x x)) (x.(y(x x)))))
+# (y.((x.(y(x x))) (x.(y(x x)))))
+# boom!
 if __name__ == '__main__':
     print(welcomeText)
     repl()

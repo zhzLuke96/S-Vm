@@ -12,6 +12,10 @@ from lamb_types import LCCall, LCFunction, LCVariable
 
 
 def preCalc(LCOBJ):
+    if LCOBJ is None:
+        # exp is ()
+        return LCVariable("[__LCNone__]"), []
+
     counter = dict(bound=0, free=0)
     log = []
 

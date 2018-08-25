@@ -80,7 +80,11 @@ class LCCall:
 
     def reduce(self):
         if self.left.reducible():
-            return LCCall(self.left.reduce(), self.right)
+            if callable(self.left):
+                # Lazy Evaluation
+                return self.left(self.right)
+            else:
+                return LCCall(self.left.reduce(), self.right)
         elif self.right.reducible():
             return LCCall(self.left, self.right.reduce())
         else:
