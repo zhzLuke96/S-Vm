@@ -1,14 +1,6 @@
-from interpreter import eval_lamb, __version__, __date__, LambdaSyntaxError
-from reduce_machine import reduce_machine, preCalc
-from colorOut import printDarkPink, printDarkYellow
-
-# default reduce calc editor
-MODETYPE = "default"
-
-welcomeText = f"""
-- lambda interpreter {__version__} (${MODETYPE}, {__date__})
-- Type "help", "copyright", "credits" or "license" for more information.
-"""
+from .interpreter import eval_lamb, __version__, __date__, LambdaSyntaxError
+from .reduce_machine import reduce_machine, preCalc
+from .colorOut import printDarkPink, printDarkYellow
 
 
 def renameLog(logs):
@@ -19,7 +11,7 @@ def renameLog(logs):
             printDarkPink(f"$ >> unbound variable: {k} rename as {v}\n")
 
 
-def read_oneLine(prompt="  >> "):
+def read_oneLine(prompt="  >> ", isloging=True):
     try:
         exp = input(prompt)
         # if exp[0] is ":":
@@ -28,9 +20,9 @@ def read_oneLine(prompt="  >> "):
         r = eval_lamb(exp)
         # print("i >>", r)
         rn, _ = preCalc(r)
-        if len(_) is not 0:
+        if isloging and len(_) is not 0:
             renameLog(_)
-        reduce_machine(rn)
+        reduce_machine(rn, isloging)
     except (KeyboardInterrupt, LambdaSyntaxError) as e:
         print(e)
         if isinstance(e, KeyboardInterrupt):
@@ -39,9 +31,14 @@ def read_oneLine(prompt="  >> "):
         pass
 
 
-def repl():
+def repl(MODETYPE):
+    global __version__, __date__
+    print(f"""
+- lambda interpreter {__version__} ({MODETYPE}, {__date__})
+- Type "help", "copyright", "credits" or "license" for more information.
+    """)
     while True:
-        read_oneLine()
+        read_oneLine(isloging=True if MODETYPE.lower() == "debug" else False)
 
 
 # ((f.(x.x)) (n.(f.(x.(f((n f) x))))))
@@ -60,5 +57,4 @@ def repl():
 # (y.((x.(y(x x))) (x.(y(x x)))))
 # boom!
 if __name__ == '__main__':
-    print(welcomeText)
     repl()

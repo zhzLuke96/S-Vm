@@ -1,14 +1,13 @@
-from colorOut import printDarkGray, printDarkGreen
+from .colorOut import printDarkGray, printDarkGreen
+from .lamb_types import LCCall, LCFunction, LCVariable
 
 
-def reduce_machine(expression):
+def reduce_machine(expression, isloging=True):
     while expression.reducible():
-        printDarkGray("= >> " + str(expression) + "\n")
+        if isloging:
+            printDarkGray("= >> " + str(expression) + "\n")
         expression = expression.reduce()
     printDarkGreen(": >> " + str(expression) + "\n")
-
-
-from lamb_types import LCCall, LCFunction, LCVariable
 
 
 def preCalc(LCOBJ):

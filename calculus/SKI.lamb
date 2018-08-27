@@ -1,0 +1,11 @@
+/**
+ * SKI combinator by lambda
+ */
+
+(define K x.y.x)
+
+(define S x.y.z.x z (y z))
+
+(define I S K K)
+
+(define II x.x)

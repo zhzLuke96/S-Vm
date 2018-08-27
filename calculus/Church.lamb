@@ -1,0 +1,54 @@
+/**
+ * editor: zhzluke96
+ * date: 2018/08/27
+ * FROK wiki，没有太多变体
+ */
+
+// chrch num
+
+(define zero f.x.x)
+
+(define succ n.f.x.f(n f x))
+
+// (define once succ zero)
+(define once f.x.f x)
+
+(define twice f.x.f (f x))
+
+(define third f.x.f(f(f x)))
+
+(define plus (x.m.m x) succ)
+
+(define mult m.n.(m(plus n) zero))
+
+(define mult2 m.n.f.m(n f))
+
+(define pred n.f.x.n(g.h.h(g f) (u.x) (u.u)))
+
+// logic
+
+(define TRUE x.y.x)
+
+(define FALSE x.y.y)
+
+(define AND p.q.p q FALSE)
+
+(define OR p.q.p TRUE q)
+
+(define NOT p.p FALSE TRUE)
+
+(define IF p.x.y.p x y) // IF P THEN X ELSE Y
+
+(define ISZERO n.n (x.FALSE) TRUE)
+
+// pair
+
+(define cons x.y.p.IF p x y)
+
+(define car x.x TRUE)
+
+(define cdr x.x FALSE)
+
+// Y combinator
+
+(define Y g.(x.g(x x) (x.g(x x))))

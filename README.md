@@ -10,10 +10,22 @@
 > 一点微小的工作
 
 # Scratch
+### grammar
+```lisp
+// chrch num
 
+(define zero f.x.x)
 
-# todo...
+(define succ n.f.x.f(n f x))
+```
 
+# cli
+### usage
+    (python3) lamb.py --help
+
+> config.ini is Statement file reference
+### screenshot
+![screenshot](https://raw.githubusercontent.com/zhzLuke96/d5-l/master/docs/1.png)
 
 # refer
 
