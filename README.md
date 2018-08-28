@@ -22,10 +22,11 @@
 # cli
 ### usage
     (python3) lamb.py --help
-
+![screenshot](https://raw.githubusercontent.com/zhzLuke96/d5-l/master/docs/3.png)
 > config.ini is Statement file reference
 ### screenshot
 ![screenshot](https://raw.githubusercontent.com/zhzLuke96/d5-l/master/docs/1.png)
+![screenshot](https://raw.githubusercontent.com/zhzLuke96/d5-l/master/docs/2.png)
 
 # refer
 

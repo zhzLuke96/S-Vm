@@ -2,12 +2,15 @@ from .colorOut import printDarkGray, printDarkGreen
 from .lamb_types import LCCall, LCFunction, LCVariable
 
 
-def reduce_machine(expression, isloging=True):
+def reduce_machine(expression, rename, isloging=True):
     while expression.reducible():
         if isloging:
             printDarkGray("= >> " + str(expression) + "\n")
         expression = expression.reduce()
-    printDarkGreen(": >> " + str(expression) + "\n")
+    reduce_res = str(expression)
+    for k, v in rename:
+        reduce_res = reduce_res.replace(v, k)
+    printDarkGreen(f": >> {reduce_res}\n")
 
 
 def preCalc(LCOBJ):

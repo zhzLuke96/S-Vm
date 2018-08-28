@@ -9,6 +9,17 @@ class LambdaSyntaxError(BaseException):
         return repr(self.value)
 
 
+def _cls(code=437):
+    import os
+    os.system(f"chcp {code}")
+    os.system("cls")
+
+
+def resize_window(w, h):
+    import os
+    os.system(f"mode con cols={w} lines={h}")
+
+
 pattern = re.compile('//.+|/\*\*[\W\w]*?\*/')
 
 
@@ -59,6 +70,26 @@ def pull(tokens):
     if breakCount is not 0:
         raise LambdaSyntaxError("Uncaught SyntaxError: Unexpected token )")
     return subNode
+
+
+fix_pattern = re.compile(r"([\$\(\)\{\}\[\]\*\+\.\?\\^\|])")
+
+
+def fuzzyfinder(user_input, collection, ignore_case=False):
+    global fix_pattern
+
+    def regex_fix(rp):
+        return re.sub(fix_pattern, " \\\\g<1> ", rp)
+    suggestions = []
+    pattern = '.*?'.join(regex_fix(user_input))
+    if ignore_case:
+        pattern = pattern.upper()
+    regex = re.compile(pattern)
+    for item in collection:
+        match = regex.search(item.upper() if ignore_case else item)
+        if match:
+            suggestions.append((len(match.group()), match.start(), item))
+    return [x for _, _, x in sorted(suggestions)]
 
 
 if __name__ == '__main__':
