@@ -19,13 +19,15 @@ style = Style.from_dict({
     'scrollbar.button': 'bg:#ffffff',
 })
 
+eval_keywords = ["define", "def", "boolean", "bool", ]
+
 
 class lambdaCompleter(Completer):
     def get_completions(self, document, complete_event):
         global global_env
         word_before_cursor = document.get_word_before_cursor(WORD=True)
         matches = fuzzyfinder(word_before_cursor,
-                              list(global_env.keys()), ignore_case=True)
+                              list(global_env.keys()) + eval_keywords, ignore_case=True)
         for m in matches:
             yield Completion(m, start_position=-len(word_before_cursor))
 

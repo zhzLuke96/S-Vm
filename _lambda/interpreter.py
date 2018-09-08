@@ -1,5 +1,6 @@
 from .lamb_types import LCCall, LCFunction, LCVariable
 from .utils import tokenize, pull, LambdaSyntaxError, file2tokens
+from .reduce_machine import reduce_machine_low
 
 __version__ = '0.0.1'
 __author__ = "zhzLuke96"
@@ -55,7 +56,14 @@ def sign(ast):
         if quote is not None:
             return LCObjCpy(quote)
         return LCVariable(ast)
-    elif ast[0] == "define":
+    elif ast[0] in ["boolean", "bool"]:
+        TEST = LCCall(LCCall(sign(ast[1:]), "True"), "False")
+        TEST_r = reduce_machine_low(TEST)
+        if str(TEST_r) == "False":
+            return LCVariable("False")
+        else:
+            return LCVariable("True")
+    elif ast[0] in ["define", "def"]:
         LCDefine(ast[1], sign(ast[2:]))
         return None
     elif "." in ast:
